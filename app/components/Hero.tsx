@@ -2,11 +2,22 @@
 
 import { motion } from "framer-motion";
 import { ArrowRight, Sparkles } from "lucide-react";
+import dynamic from "next/dynamic";
+
+const RobotHead = dynamic(() => import("./RobotHead"), {
+  ssr: false,
+  loading: () => <div className="absolute inset-0" />,
+});
 
 export default function Hero() {
   return (
-    <section className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 via-white to-pink-50 pt-20">
-      <div className="container mx-auto px-6 py-20">
+    <section className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 via-white to-pink-50 pt-20 overflow-hidden">
+      {/* 3D Robot Head Background */}
+      <div className="absolute inset-0 w-full h-full opacity-40 pointer-events-none">
+        <RobotHead />
+      </div>
+
+      <div className="container mx-auto px-6 py-20 relative z-10">
         <div className="max-w-4xl mx-auto text-center">
           {/* Badge */}
           <motion.div
