@@ -53,10 +53,7 @@ export default function ContactForm() {
   };
 
   return (
-    <section
-      id="contact"
-      className="py-20 bg-gradient-to-br from-purple-50 via-white to-pink-50"
-    >
+    <section id="contact" className="py-20 bg-black border-t border-white/10">
       <div className="container mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -66,12 +63,11 @@ export default function ContactForm() {
           className="max-w-2xl mx-auto"
         >
           <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-              Let's Build Together
+            <h2 className="text-6xl md:text-7xl font-black mb-4 text-white tracking-tight">
+              Get in Touch
             </h2>
-            <p className="text-xl text-gray-600">
-              Get a free consultation and discover how AI can transform your
-              business
+            <p className="text-xl font-bold text-white/70">
+              Let's build something amazing together
             </p>
           </div>
 
@@ -80,28 +76,28 @@ export default function ContactForm() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="bg-white rounded-2xl shadow-xl p-8"
+            className="border border-white/10 bg-black/40 backdrop-blur-sm p-8 rounded-lg"
           >
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               {/* Name Field */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Full Name *
+                <label className="block text-sm font-medium text-white/80 mb-2">
+                  Name *
                 </label>
                 <div className="relative">
                   <User
-                    className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-                    size={20}
+                    className="absolute left-4 top-1/2 -translate-y-1/2 text-white/30"
+                    size={18}
                   />
                   <input
                     {...register("name")}
                     type="text"
-                    className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent outline-none transition-all"
+                    className="w-full pl-12 pr-4 py-3.5 bg-black/50 border border-white/20 rounded-lg text-white focus:border-[#d8ff00] focus:ring-2 focus:ring-[#d8ff00]/20 outline-none transition-all font-normal placeholder:text-white/30"
                     placeholder="John Doe"
                   />
                 </div>
                 {errors.name && (
-                  <p className="text-red-500 text-sm mt-1">
+                  <p className="text-[#d8ff00] text-sm mt-1.5 font-medium">
                     {errors.name.message}
                   </p>
                 )}
@@ -109,23 +105,23 @@ export default function ContactForm() {
 
               {/* Email Field */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Email Address *
+                <label className="block text-sm font-medium text-white/80 mb-2">
+                  Email *
                 </label>
                 <div className="relative">
                   <Mail
-                    className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-                    size={20}
+                    className="absolute left-4 top-1/2 -translate-y-1/2 text-white/30"
+                    size={18}
                   />
                   <input
                     {...register("email")}
                     type="email"
-                    className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent outline-none transition-all"
+                    className="w-full pl-12 pr-4 py-3.5 bg-black/50 border border-white/20 rounded-lg text-white focus:border-[#d8ff00] focus:ring-2 focus:ring-[#d8ff00]/20 outline-none transition-all font-normal placeholder:text-white/30"
                     placeholder="john@example.com"
                   />
                 </div>
                 {errors.email && (
-                  <p className="text-red-500 text-sm mt-1">
+                  <p className="text-[#d8ff00] text-sm mt-1.5 font-medium">
                     {errors.email.message}
                   </p>
                 )}
@@ -133,42 +129,42 @@ export default function ContactForm() {
 
               {/* Company Field */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Company (Optional)
+                <label className="block text-sm font-medium text-white/80 mb-2">
+                  Company
                 </label>
                 <div className="relative">
                   <Building
-                    className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-                    size={20}
+                    className="absolute left-4 top-1/2 -translate-y-1/2 text-white/30"
+                    size={18}
                   />
                   <input
                     {...register("company")}
                     type="text"
-                    className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent outline-none transition-all"
-                    placeholder="Your Company"
+                    className="w-full pl-12 pr-4 py-3.5 bg-black/50 border border-white/20 rounded-lg text-white focus:border-[#d8ff00] focus:ring-2 focus:ring-[#d8ff00]/20 outline-none transition-all font-normal placeholder:text-white/30"
+                    placeholder="Your Company (Optional)"
                   />
                 </div>
               </div>
 
               {/* Message Field */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-white/80 mb-2">
                   Message *
                 </label>
                 <div className="relative">
                   <MessageSquare
-                    className="absolute left-3 top-4 text-gray-400"
-                    size={20}
+                    className="absolute left-4 top-4 text-white/30"
+                    size={18}
                   />
                   <textarea
                     {...register("message")}
                     rows={5}
-                    className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent outline-none transition-all resize-none"
-                    placeholder="Tell us about your project..."
+                    className="w-full pl-12 pr-4 py-3.5 bg-black/50 border border-white/20 rounded-lg text-white focus:border-[#d8ff00] focus:ring-2 focus:ring-[#d8ff00]/20 outline-none transition-all resize-none font-normal placeholder:text-white/30"
+                    placeholder="Tell me about your project..."
                   />
                 </div>
                 {errors.message && (
-                  <p className="text-red-500 text-sm mt-1">
+                  <p className="text-[#d8ff00] text-sm mt-1.5 font-medium">
                     {errors.message.message}
                   </p>
                 )}
@@ -178,14 +174,14 @@ export default function ContactForm() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-4 rounded-lg font-semibold hover:shadow-lg transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-[#d8ff00] text-black py-4 font-semibold text-base hover:bg-[#d8ff00]/90 transition-all flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-[#d8ff00]/20 rounded-[5px]"
               >
                 {isSubmitting ? (
                   "Sending..."
                 ) : (
                   <>
                     Send Message
-                    <Send size={20} />
+                    <Send size={18} />
                   </>
                 )}
               </button>
@@ -195,9 +191,9 @@ export default function ContactForm() {
                 <motion.div
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="bg-green-50 text-green-700 p-4 rounded-lg text-center"
+                  className="border border-[#d8ff00] bg-[#d8ff00]/10 text-[#d8ff00] p-4 text-center text-sm font-medium rounded-lg"
                 >
-                  ✓ Thank you! We'll be in touch soon.
+                  ✓ Message sent successfully!
                 </motion.div>
               )}
             </form>

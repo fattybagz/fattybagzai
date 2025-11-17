@@ -1,20 +1,20 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import dynamic from "next/dynamic";
 
-const RobotHead = dynamic(() => import("./RobotHead"), {
+const CursorParticleField = dynamic(() => import("./CursorParticleField"), {
   ssr: false,
   loading: () => <div className="absolute inset-0" />,
 });
 
 export default function Hero() {
   return (
-    <section className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 via-white to-pink-50 pt-20 overflow-hidden">
-      {/* 3D Robot Head Background */}
-      <div className="absolute inset-0 w-full h-full opacity-40 pointer-events-none">
-        <RobotHead />
+    <section className="relative min-h-screen flex items-center justify-center bg-black pt-20 overflow-hidden">
+      {/* Cursor-Reactive Particle Field */}
+      <div className="absolute inset-0 w-full h-full opacity-70 pointer-events-none">
+        <CursorParticleField />
       </div>
 
       <div className="container mx-auto px-6 py-20 relative z-10">
@@ -24,32 +24,32 @@ export default function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="inline-flex items-center gap-2 bg-purple-100 text-purple-700 px-4 py-2 rounded-full mb-8"
+            className="inline-flex items-center gap-2 border border-[#7fff00] px-4 py-2 mb-8"
           >
-            <Sparkles size={16} />
-            <span className="text-sm font-medium">AI-Powered Solutions</span>
+            <span className="text-xs font-light tracking-widest uppercase text-[#7fff00]">
+              AI
+            </span>
           </motion.div>
 
-          {/* Headline */}
+          {/* Headline - Modern minimalist */}
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-purple-600 via-pink-600 to-purple-600 bg-clip-text text-transparent"
+            className="text-6xl md:text-8xl font-extralight mb-6 text-white tracking-tight"
           >
-            Transform Your Business with AI
+            Transform
           </motion.h1>
 
-          {/* Subheadline */}
-          <motion.p
+          <motion.h2
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-xl md:text-2xl text-gray-600 mb-12 max-w-2xl mx-auto"
+            className="text-3xl md:text-5xl font-light mb-12 text-white/60"
           >
-            Cutting-edge AI solutions tailored to your needs. Let's build
-            something extraordinary together.
-          </motion.p>
+            Business. <span className="chartreuse-accent">Intelligence</span>.
+            Solutions.
+          </motion.h2>
 
           {/* CTA Buttons */}
           <motion.div
@@ -60,19 +60,19 @@ export default function Hero() {
           >
             <a
               href="#contact"
-              className="group bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-4 rounded-full text-lg font-semibold hover:shadow-2xl transition-all flex items-center justify-center gap-2"
+              className="group bg-[#7fff00] text-black px-8 py-4 text-sm font-light tracking-widest uppercase hover:bg-white transition-all flex items-center justify-center gap-3"
             >
-              Get Free Consultation
+              Consult
               <ArrowRight
-                size={20}
+                size={16}
                 className="group-hover:translate-x-1 transition-transform"
               />
             </a>
             <a
               href="/portfolio"
-              className="bg-white text-purple-600 px-8 py-4 rounded-full text-lg font-semibold border-2 border-purple-600 hover:bg-purple-50 transition-colors"
+              className="bg-transparent text-white px-8 py-4 text-sm font-light tracking-widest uppercase border border-white hover:bg-white hover:text-black transition-colors"
             >
-              View Portfolio
+              Work
             </a>
           </motion.div>
 
@@ -84,21 +84,23 @@ export default function Hero() {
             className="mt-20 grid grid-cols-1 md:grid-cols-3 gap-8"
           >
             {[
-              { label: "AI Innovation", value: "100%" },
-              { label: "Client Satisfaction", value: "95+%" },
-              { label: "Projects Delivered", value: "50+" },
+              { label: "Innovation", value: "100%" },
+              { label: "Satisfaction", value: "95+%" },
+              { label: "Delivered", value: "50+" },
             ].map((stat, index) => (
               <motion.div
                 key={stat.label}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.6 + index * 0.1 }}
-                className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg"
+                className="border border-white/10 p-6 hover:border-[#7fff00]/50 transition-colors"
               >
-                <div className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-2">
+                <div className="text-4xl font-extralight text-white mb-2">
                   {stat.value}
                 </div>
-                <div className="text-gray-600">{stat.label}</div>
+                <div className="text-xs font-light tracking-widest uppercase text-white/40">
+                  {stat.label}
+                </div>
               </motion.div>
             ))}
           </motion.div>

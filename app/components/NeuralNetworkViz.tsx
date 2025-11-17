@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { Canvas, useFrame } from '@react-three/fiber';
-import { useRef, useState } from 'react';
-import * as THREE from 'three';
+import { Canvas, useFrame } from "@react-three/fiber";
+import { useRef, useState } from "react";
+import * as THREE from "three";
 
 function NeuralNetwork() {
   const groupRef = useRef<THREE.Group>(null);
@@ -44,16 +44,26 @@ function NeuralNetwork() {
           if (Math.random() > 0.7) return null;
 
           return (
-            <mesh key={`line-${i}-${j}`} position={[
-              (pos1.x + pos2.x) / 2,
-              (pos1.y + pos2.y) / 2,
-              (pos1.z + pos2.z) / 2
-            ]}>
-              <cylinderGeometry args={[0.02, 0.02, Math.sqrt(
-                Math.pow(pos2.x - pos1.x, 2) +
-                Math.pow(pos2.y - pos1.y, 2) +
-                Math.pow(pos2.z - pos1.z, 2)
-              ), 8]} />
+            <mesh
+              key={`line-${i}-${j}`}
+              position={[
+                (pos1.x + pos2.x) / 2,
+                (pos1.y + pos2.y) / 2,
+                (pos1.z + pos2.z) / 2,
+              ]}
+            >
+              <cylinderGeometry
+                args={[
+                  0.02,
+                  0.02,
+                  Math.sqrt(
+                    Math.pow(pos2.x - pos1.x, 2) +
+                      Math.pow(pos2.y - pos1.y, 2) +
+                      Math.pow(pos2.z - pos1.z, 2)
+                  ),
+                  8,
+                ]}
+              />
               <meshStandardMaterial
                 color="#a855f7"
                 emissive="#a855f7"

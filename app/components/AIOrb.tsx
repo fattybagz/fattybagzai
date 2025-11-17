@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { Canvas, useFrame } from '@react-three/fiber';
-import { useRef, useState } from 'react';
-import * as THREE from 'three';
-import { MeshDistortMaterial, Sphere } from '@react-three/drei';
+import { Canvas, useFrame } from "@react-three/fiber";
+import { useRef, useState } from "react";
+import * as THREE from "three";
+import { MeshDistortMaterial, Sphere } from "@react-three/drei";
 
 function FloatingAIOrb() {
   const orbRef = useRef<THREE.Mesh>(null);
@@ -11,7 +11,7 @@ function FloatingAIOrb() {
 
   useFrame((state, delta) => {
     setTime(time + delta);
-    
+
     if (orbRef.current) {
       orbRef.current.rotation.x = time * 0.3;
       orbRef.current.rotation.y = time * 0.2;
