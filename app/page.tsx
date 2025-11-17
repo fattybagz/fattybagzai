@@ -1,13 +1,11 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useEffect } from "react";
 import { motion, useInView } from "framer-motion";
 import PlayCanvasHero from "./components/PlayCanvasHero";
 import Services from "./components/Services";
-import Skills from "./components/Skills";
 import ContactForm from "./components/ContactForm";
 import Header from "./components/Header";
-import { CompiledResume } from "./components/CompiledResume";
 
 function ScrollSection({
   children,
@@ -33,31 +31,49 @@ function ScrollSection({
 }
 
 export default function Home() {
-  const [isResumeOpen, setIsResumeOpen] = useState(false);
+  useEffect(() => {
+    // Suppress known PlayCanvas warnings
+    const originalError = console.error;
+    const originalWarn = console.warn;
+    
+    console.error = (...args) => {
+      const message = args[0]?.toString() || '';
+      if (
+        message.includes('OrbitCameraInputMouse') ||
+        message.includes('scriptName') ||
+        message.includes('forward-logs-shared') ||
+        message.includes('intercept-console-error')
+      ) {
+        return;
+      }
+      originalError.apply(console, args);
+    };
+    
+    console.warn = (...args) => {
+      const message = args[0]?.toString() || '';
+      if (
+        message.includes('OrbitCameraInputMouse') ||
+        message.includes('initialize')
+      ) {
+        return;
+      }
+      originalWarn.apply(console, args);
+    };
+    
+    return () => {
+      console.error = originalError;
+      console.warn = originalWarn;
+    };
+  }, []);
 
   return (
     <>
       <Header />
-      <CompiledResume isOpen={isResumeOpen} onClose={() => setIsResumeOpen(false)} />
-      
-      <motion.div
-        animate={{
-          opacity: isResumeOpen ? 0 : 1,
-          y: isResumeOpen ? 20 : 0,
-        }}
-        transition={{ duration: 0.5 }}
-      >
-        <PlayCanvasHero />
-        <ScrollSection id="experience">
-          <Services onCompileResume={() => setIsResumeOpen(true)} />
-        </ScrollSection>
-        <ScrollSection id="skills">
-          <Skills />
-        </ScrollSection>
-        <ScrollSection id="contact">
-          <ContactForm />
-        </ScrollSection>
-      </motion.div>
+      <PlayCanvasHero />
+      <ScrollSection id="services">
+        <Services />
+      </ScrollSection>
+      <ContactForm />
     </>
   );
 }
