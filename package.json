@@ -3,18 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "set NODE_OPTIONS=--no-warnings && next dev",
-    "dev:turbo": "next dev",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
-    "@playcanvas/react": "^0.10.3",
     "@react-three/drei": "^10.7.6",
     "@react-three/fiber": "^9.4.0",
-    "ammo.js": "^0.0.10",
     "framer-motion": "^12.23.24",
     "gsap": "^3.13.0",
     "lucide-react": "^0.552.0",

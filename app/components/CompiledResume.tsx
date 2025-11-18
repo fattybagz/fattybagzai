@@ -15,16 +15,16 @@ export function CompiledResume({ isOpen, onClose }: CompiledResumeProps) {
   const [compilingPhase, setCompilingPhase] = React.useState(0);
   const [visibleSections, setVisibleSections] = React.useState<string[]>([]);
   
-  // Store completed text to prevent re-typing
-  const completedTextRef = React.useRef<Map<string, string>>(new Map());
+  // Store completed text and typing state to prevent re-typing
+  const textStateRef = React.useRef<Map<string, { text: string; hasStarted: boolean; isComplete: boolean }>>(new Map());
 
   React.useEffect(() => {
     if (isOpen) {
       // Reset state
       setCompilingPhase(0);
       setVisibleSections([]);
-      // Clear completed text cache for fresh start
-      completedTextRef.current.clear();
+      // Clear text state cache for fresh start
+      textStateRef.current.clear();
       
       // Simulate compilation phases
       const phases = [
@@ -47,47 +47,135 @@ export function CompiledResume({ isOpen, onClose }: CompiledResumeProps) {
   }, [isOpen]);
 
   const TypewriterText = React.memo(({ text, delay = 0, sectionKey }: { text: string; delay?: number; sectionKey: string }) => {
-    // Check if this text has already been typed
-    const existingText = completedTextRef.current.get(sectionKey);
-    const [displayedText, setDisplayedText] = React.useState(existingText || "");
-    const [currentIndex, setCurrentIndex] = React.useState(existingText ? text.length : 0);
-    const [hasStarted, setHasStarted] = React.useState(!!existingText);
-    const isComplete = currentIndex >= text.length;
-
-    // Save completed text
-    React.useEffect(() => {
-      if (isComplete && displayedText.length > 0) {
-        completedTextRef.current.set(sectionKey, displayedText);
+    // Get or initialize persistent state from ref (never resets)
+    const getState = () => {
+      let state = textStateRef.current.get(sectionKey);
+      if (!state) {
+        state = { text: "", hasStarted: false, isComplete: false };
+        textStateRef.current.set(sectionKey, state);
       }
-    }, [isComplete, displayedText, sectionKey]);
+      return state;
+    };
 
+    // Initialize displayed text from persistent ref state
+    const state = getState();
+    const [displayedText, setDisplayedText] = React.useState(state.text);
+    
+    // Use refs for all mutable state (never reset on re-render)
+    const currentIndexRef = React.useRef(state.text.length);
+    const hasStartedRef = React.useRef(state.hasStarted);
+    const timeoutRef = React.useRef<NodeJS.Timeout | null>(null);
+    const isMountedRef = React.useRef(true);
+    const textRef = React.useRef(text);
+
+    // Update text ref when it changes
     React.useEffect(() => {
-      // If already completed, don't restart
-      if (existingText) return;
+      textRef.current = text;
+    }, [text]);
+
+    // Single effect to handle all typing logic (runs once per section)
+    React.useEffect(() => {
+      isMountedRef.current = true;
+      const state = getState();
+      const currentText = textRef.current;
       
-      // Only start typing once
-      if (!hasStarted) {
-        const startTimeout = setTimeout(() => {
-          setHasStarted(true);
-        }, delay);
-        return () => clearTimeout(startTimeout);
+      // If already completed, just display the text
+      if (state.isComplete) {
+        if (displayedText !== state.text) {
+          setDisplayedText(state.text);
+        }
+        return;
       }
-    }, [hasStarted, delay, existingText]);
-
-    React.useEffect(() => {
-      // If already completed, don't continue typing
-      if (existingText) return;
       
-      if (hasStarted && currentIndex < text.length) {
-        const timeout = setTimeout(() => {
-          setDisplayedText(prev => prev + text[currentIndex]);
-          setCurrentIndex(prev => prev + 1);
-        }, 15 + Math.random() * 20);
-        return () => clearTimeout(timeout);
+      // If already started, continue from where we left off
+      if (state.hasStarted || hasStartedRef.current) {
+        hasStartedRef.current = true;
+        state.hasStarted = true;
+        
+        // Continue typing if not complete
+        const continueTyping = () => {
+          if (!isMountedRef.current) return;
+          
+          const currentState = getState();
+          const currentText = textRef.current;
+          if (currentState.isComplete || currentIndexRef.current >= currentText.length) {
+            currentState.isComplete = true;
+            return;
+          }
+          
+          // Build text from start to current index (prevents duplication)
+          const newText = currentText.substring(0, currentIndexRef.current + 1);
+          currentIndexRef.current += 1;
+          currentState.text = newText;
+          
+          if (newText.length >= currentText.length) {
+            currentState.isComplete = true;
+          }
+          
+          setDisplayedText(newText);
+          
+          if (currentIndexRef.current < currentText.length && isMountedRef.current) {
+            timeoutRef.current = setTimeout(continueTyping, 15 + Math.random() * 20);
+          }
+        };
+        
+        if (currentIndexRef.current < textRef.current.length) {
+          continueTyping();
+        }
+        return;
       }
-    }, [currentIndex, text, hasStarted, existingText]);
+      
+      // Start typing after delay (only once)
+      timeoutRef.current = setTimeout(() => {
+        if (!isMountedRef.current) return;
+        
+        hasStartedRef.current = true;
+        const currentState = getState();
+        currentState.hasStarted = true;
+        
+        // Start typing
+        const startTyping = () => {
+          if (!isMountedRef.current) return;
+          
+          const currentState = getState();
+          const currentText = textRef.current;
+          if (currentState.isComplete || currentIndexRef.current >= currentText.length) {
+            currentState.isComplete = true;
+            return;
+          }
+          
+          // Build text from start to current index (prevents duplication)
+          const newText = currentText.substring(0, currentIndexRef.current + 1);
+          currentIndexRef.current += 1;
+          currentState.text = newText;
+          
+          if (newText.length >= currentText.length) {
+            currentState.isComplete = true;
+          }
+          
+          setDisplayedText(newText);
+          
+          if (currentIndexRef.current < currentText.length && isMountedRef.current) {
+            timeoutRef.current = setTimeout(startTyping, 15 + Math.random() * 20);
+          }
+        };
+        
+        startTyping();
+      }, delay);
+      
+      return () => {
+        isMountedRef.current = false;
+        if (timeoutRef.current) {
+          clearTimeout(timeoutRef.current);
+          timeoutRef.current = null;
+        }
+      };
+    }, [sectionKey]); // Only depend on sectionKey - never restart for same section
 
     return <span>{displayedText}</span>;
+  }, (prevProps, nextProps) => {
+    // Only re-render if sectionKey changes (text can change but we persist state)
+    return prevProps.sectionKey === nextProps.sectionKey;
   });
   
   TypewriterText.displayName = 'TypewriterText';
